@@ -1,4 +1,3 @@
-.github/workflows/build-windows.yml
 name: Build Windows Executable
 
 on:
