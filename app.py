@@ -7,8 +7,21 @@ import json
 import webbrowser
 import winreg
 import colorsys
+import threading
 from flask import Flask, jsonify, request, send_file
 from flask_cors import CORS
+
+# --- NEW IMPROVEMENTS IMPORTS ---
+from websocket_server import run_server_in_thread, push_achievement_unlocked, push_game_change
+from streamerbot_handler import streamerbot_bp, init_streamerbot, check_and_announce_rare
+from sound_manager import SoundManager
+
+# Start WebSocket server in background thread
+ws_thread = threading.Thread(target=run_server_in_thread, args=('localhost', 8765), daemon=True)
+ws_thread.start()
+
+# Initialize sound manager
+sound_mgr = SoundManager(base_volume=0.5)
 
 try:
     from PIL import Image
@@ -19,6 +32,12 @@ except ImportError:
 
 app = Flask(__name__)
 CORS(app)
+
+# Register Streamer.bot blueprint
+app.register_blueprint(streamerbot_bp)
+
+# Initialize Streamer.bot handler with app state
+init_streamerbot(state, load_config)
 
 # --- ROBUST PATH FINDER ---
 def get_resource_path(filename):
@@ -311,6 +330,44 @@ def get_data():
             if state['start_count'] == -1: state['start_count'] = count
             session_unlocks = max(0, count - state['start_count'])
             
+            # --- NEW ACHIEVEMENT DETECTION & WEBSOCKET BROADCAST ---
+            # Check for newly unlocked achievements since last update
+            prev_unlocked_ids = set()
+            if state.get('cached_response') and state['cached_response'].get('recent'):
+                prev_unlocked_ids = {a['name'] for a in state['cached_response']['recent']}
+            
+            current_unlocked_ids = {a['name'] for a in unlocked}
+            new_achievements = [a for a in unlocked if a['name'] not in prev_unlocked_ids]
+            
+            # Broadcast new achievements via WebSocket
+            for ach in new_achievements:
+                # Push to WebSocket clients
+                push_achievement_unlocked(ach)
+                
+                # Check for rare achievement announcement
+                rare_msg = check_and_announce_rare(ach, ach.get('rarity', 100))
+                if rare_msg:
+                    print(f"🎉 RARE UNLOCK: {rare_msg}")
+                    # Note: To actually send to chat, you'd POST to Streamer.bot
+                    # This prints to console for now - Streamer.bot can monitor logs
+            
+            # --- GAME CHANGE DETECTION ---
+            if state.get('cached_response') and state['cached_response'].get('appid') != active_appid:
+                # Game changed - broadcast
+                push_game_change({
+                    "appid": active_appid,
+                    "name": game_name,
+                    "art": f"https://cdn.akamai.steamstatic.com/steam/apps/{active_appid}/header.jpg"
+                })
+            # --------------------------------------------------------
+            
+            # --- SOUND CONFIG BASED ON RARITY ---
+            # Add sound config for most recent achievement
+            sound_config = None
+            if unlocked:
+                sound_config = sound_mgr.play_achievement_sound(unlocked[-1])
+            # ------------------------------------
+            
             dynamic_theme = get_theme_color(active_appid)
             state['steam_theme_cache'] = dynamic_theme 
 
@@ -330,7 +387,8 @@ def get_data():
                 "is_100": percent == 100,
                 "play_sound": cfg.get('play_sound', True),
                 "volume": cfg.get('volume', 50),
-                "platform": "steam"
+                "platform": "steam",
+                "sound_config": sound_config  # New: rarity-based sound config
             }
 
         if final_res and final_res['status'] == 'active':
