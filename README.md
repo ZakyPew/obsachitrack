@@ -8,7 +8,7 @@ A dynamic, automated Steam Achievement Tracker for OBS Studio. It runs locally o
 <div align="center">
 <a href="https://youtu.be/giiv7gTtkRo"><img width="500" height="500" alt="image" src="https://github.com/user-attachments/assets/372ab7e5-7ff7-4605-9c2e-7226ef6572e" /></a></div>
 
-## ✨ What's New in v1.6
+## ✨ What's New in v1.7
 
 🎉 **Major update with real-time features!**
 
@@ -31,7 +31,7 @@ A dynamic, automated Steam Achievement Tracker for OBS Studio. It runs locally o
 -   **💤 Smart Standby:** Switches to a sleek "Profile Card" showing your avatar and stats when no game is running.
 -   **⚡ Lightweight:** Written in Python, runs locally, uses minimal resources.
 
-### New in v1.6 — Streamer.bot Integration 🤖
+### New in v1.7 — Streamer.bot Integration 🤖
 
 Connect to [Streamer.bot](https://streamer.bot) for powerful chat integration:
 
@@ -43,7 +43,7 @@ Connect to [Streamer.bot](https://streamer.bot) for powerful chat integration:
 
 **Auto-announcements:** Rare achievements (< 5% global unlock rate) are automatically announced in chat!
 
-### New in v1.6 — Rarity Sound Tiers 🔊
+### New in v1.7 — Rarity Sound Tiers 🔊
 
 Different sounds play based on achievement rarity:
 
@@ -80,7 +80,7 @@ Different sounds play based on achievement rarity:
 
 You can download the latest pre-compiled `.exe` from the **[Releases Page](../../releases)**.
 
-### Latest: v1.6 🎉
+### Latest: v1.7 🎉
 - ✨ WebSocket real-time updates
 - 🤖 Streamer.bot chat integration  
 - 🔊 Rarity-based sound alerts
@@ -95,7 +95,7 @@ This project is free and open source. If it helps your stream, consider buying m
 
 ## 📦 Installation
 
-1.  Download **`StreamTracker_v1.6.zip`** from [Releases](../../releases).
+1.  Download **`StreamTracker_v1.7.zip`** from [Releases](../../releases).
 2.  **Unzip** the folder to a permanent location (e.g., Documents/StreamTools).
 3.  Run `StreamTracker.exe`.
 4.  Enter your Steam API Key and ID in the Setup Wizard.

@@ -34,7 +34,7 @@ build_windows.bat
 
 ## Release Package Structure
 ```
-StreamTracker_v1.6.zip
+StreamTracker_v1.7.zip
 ├── StreamTracker.exe
 ├── README.md
 ├── INTEGRATION.md
@@ -59,7 +59,7 @@ StreamTracker_v1.6.zip
 - [ ] Update Discord
 - [ ] Reply to any open issues about these features
 
-## New Features in v1.6
+## New Features in v1.7
 🎉 Highlight these in release notes:
 - ✨ **WebSocket Real-Time Updates** - Instant achievement popups
 - 🤖 **Streamer.bot Integration** - Chat commands `!progress`, `!hunter`, `!recent`
