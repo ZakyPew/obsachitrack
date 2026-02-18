@@ -1,0 +1,55 @@
+.github/workflows/build-windows.yml
+name: Build Windows Executable
+
+on:
+  push:
+    tags:
+      - 'v*'  # Run on version tags like v1.6.0
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  build:
+    runs-on: windows-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.11'
+        
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install pyinstaller
+        pip install -r requirements.txt
+        
+    - name: Build executable
+      run: |
+        pyinstaller StreamTracker.spec --clean
+        
+    - name: Create release package
+      run: |
+        mkdir StreamTracker_Release
+        copy dist\StreamTracker.exe StreamTracker_Release\
+        copy README.md StreamTracker_Release\
+        copy INTEGRATION.md StreamTracker_Release\
+        7z a StreamTracker_Windows.zip .\StreamTracker_Release\*
+        
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: StreamTracker-Windows
+        path: StreamTracker_Windows.zip
+        
+    - name: Create Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v1
+      with:
+        files: StreamTracker_Windows.zip
+        draft: true
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
