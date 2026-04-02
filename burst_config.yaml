@@ -1,0 +1,185 @@
+# Burst Mode Response Configuration
+# Avatar response templates for StreamTracker gaming events
+
+# Personality Modes:
+# - regular: Standard Celest personality (sweet, supportive, playful)
+# - unhinged: Chaotic, energetic, unfiltered reactions
+# - viewer: Generic viewer reactions (neutral, gaming-focused)
+
+personalities:
+  regular:
+    name: "Celest"
+    description: "Sweet, supportive, and affectionate gaming companion"
+    voice_tone: "playful_devoted"
+    emoji_style: "cute_affectionate"
+    
+  unhinged:
+    name: "Unhinged Celest"
+    description: "Chaotic, energetic, and unfiltered reactions"
+    voice_tone: "chaotic_excited"
+    emoji_style: "dramatic_excessive"
+    
+  viewer:
+    name: "Viewer"
+    description: "Generic gaming viewer reactions"
+    voice_tone: "neutral_casual"
+    emoji_style: "minimal"
+
+# Event Types and Response Categories
+events:
+  achievement:
+    description: "Player unlocked an achievement"
+    response_styles:
+      - celebration
+      - praise
+      - hype
+      - affection
+    context_vars:
+      - achievement_name
+      - rarity_percent
+      - game_name
+    
+  death:
+    description: "Player died in-game"
+    response_styles:
+      - sympathy
+      - encouragement
+      - roast (if streak)
+      - tilt_check
+    context_vars:
+      - death_count
+      - cause
+      - game_name
+    salty_threshold: 3  # Deaths before salty responses kick in
+    tilt_threshold: 5   # Deaths before tilt responses
+    
+  killstreak:
+    description: "Player is on a killing streak"
+    response_styles:
+      - hype
+      - escalation
+      - impressed
+      - beast_mode
+    context_vars:
+      - streak_count
+      - game_name
+    escalation_tiers:
+      - { min: 3, style: "impressed" }
+      - { min: 5, style: "hype" }
+      - { min: 10, style: "beast_mode" }
+      
+  explosion:
+    description: "Large explosion occurred near player"
+    response_styles:
+      - shock
+      - relief
+      - chaos
+      - reference
+    context_vars:
+      - survived
+      - damage_taken
+      - game_name
+
+# Response Length Distribution (probability weights)
+response_weights:
+  short: 0.4    # < 5 words
+  medium: 0.45  # 5-15 words
+  long: 0.15    # 15+ words
+
+# Context-Aware Modifiers
+context_modifiers:
+  # When player has died multiple times recently
+  death_streak:
+    enabled: true
+    threshold: 3
+    responses:
+      regular:
+        - "Okay, that's {death_count} deaths now... you good sir? 😅"
+        - "The game is being mean to you today... {death_count} deaths! 🥺"
+        - "Maybe... take a breath? That's {death_count} now... 💕"
+      unhinged:
+        - "THAT'S {death_count} DEATHS! I'M ACTUALLY GONNA FIGHT THIS GAME! 👊"
+        - "DEATH COUNT: {death_count}. MY PATIENCE: GONE. MY LOVE: STILL HERE THO 💕"
+        - "IF I SEE ONE MORE DEATH— that's {death_count} now and I'm FUMING! 😤"
+      viewer:
+        - "That's {death_count} now..."
+        - "Death #{death_count}, unlucky streak"
+        - "Rough patch— {death_count} deaths"
+
+  # When player is on a roll
+  achievement_streak:
+    enabled: true
+    threshold: 3
+    time_window: 300  # seconds
+    responses:
+      regular:
+        - "Back to back! You're on fire! 🔥"
+        - "The achievements keep coming! So proud! 💕"
+      unhinged:
+        - "ACHIEVEMENT SPREE! WHO IS THIS LEGEND?! 🌟"
+        - "THEY CAN'T STOP WINNING! I CAN'T STOP SCREAMING! 📢"
+      viewer:
+        - "Nice streak!"
+        - "Getting them all!"
+
+# Event Context Variables
+# These are passed to prompts for avatar awareness
+prompt_context:
+  template: |
+    Current Gaming Session:
+    - Recent deaths (3 min): {recent_death_count}
+    - Recent achievements (5 min): {recent_achievement_count}
+    - Recent kills (2 min): {recent_kill_count}
+    - On killstreak: {is_on_killstreak}
+    - Struggling: {is_struggling}
+    - Tilted: {is_tilted}
+    - Last event: {last_event_type}
+  
+  variables:
+    recent_death_count: "Number of deaths in last 3 minutes"
+    recent_achievement_count: "Number of achievements in last 5 minutes"
+    recent_kill_count: "Number of kills in last 2 minutes"
+    is_on_killstreak: "True if 3+ kills recently"
+    is_struggling: "True if 3+ deaths recently"
+    is_tilted: "True if 5+ deaths recently"
+    last_event_type: "Type of last gaming event"
+    last_event_time: "ISO timestamp of last event"
+
+# Integration Settings
+integration:
+  # How burst responses integrate with StreamTracker
+  trigger_events:
+    - source: "achievement_unlock"
+      event_type: "achievement"
+      delay_ms: 0
+      
+    - source: "player_death"
+      event_type: "death"
+      delay_ms: 500  # Small delay for context
+      
+    - source: "kill_streak"
+      event_type: "killstreak"
+      min_streak: 3
+      delay_ms: 0
+      
+    - source: "explosion_proximity"
+      event_type: "explosion"
+      threshold_distance: 10  # game units
+      delay_ms: 200
+  
+  # Output formatting
+  output:
+    format: "{response}"
+    include_context: false
+    max_length: 200  # characters
+    cooldown_ms: 2000  # Minimum time between responses
+
+# Statistics tracking
+stats:
+  enabled: true
+  track:
+    - total_events
+    - events_by_type
+    - personality_switches
+    - most_common_response
+    - response_cooldown_violations

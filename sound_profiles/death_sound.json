@@ -1,0 +1,17 @@
+{
+  "name": "death_sound",
+  "event_type": "DEATH_SOUND",
+  "description": "Dark Souls / Elden Ring style death sound - deep bass impact",
+  "frequency_range": [100, 1000],
+  "duration_range": [1.5, 4.0],
+  "correlation_threshold": 0.60,
+  "energy_threshold": 0.20,
+  "characteristics": {
+    "primary_frequency": 150,
+    "secondary_frequency": 400,
+    "harmonics": [80],
+    "envelope": "slow_decay",
+    "signature": "bass_impact_drone",
+    "vocal_element": true
+  }
+}

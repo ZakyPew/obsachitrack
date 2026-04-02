@@ -62,3 +62,31 @@ class GameSession(Base):
     ended_at = Column(DateTime, nullable=True)
     unlock_count = Column(Integer, default=0)
     is_active = Column(Boolean, default=True)
+
+
+class BurstEvent(Base):
+    """Logs audio-detected burst events for avatar triggers"""
+    __tablename__ = "burst_events"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    event_type = Column(String(50), nullable=False)  # achievement, death, killstreak, explosion
+    confidence = Column(Float, nullable=False)
+    timestamp = Column(Integer, nullable=False)  # unix_ms from client
+    game_context = Column(String(255), nullable=True)
+    processed = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class AvatarQueueItem(Base):
+    """Persistent avatar queue for tracking response jobs"""
+    __tablename__ = "avatar_queue"
+    
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    event_type = Column(String(50), nullable=False)
+    priority = Column(String(20), default="normal")  # normal, burst
+    payload = Column(String)  # JSON string
+    status = Column(String(20), default="pending")  # pending, processing, completed, failed
+    created_at = Column(DateTime, default=datetime.utcnow)
+    processed_at = Column(DateTime, nullable=True)

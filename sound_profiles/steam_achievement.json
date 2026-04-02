@@ -1,0 +1,16 @@
+{
+  "name": "steam_achievement",
+  "event_type": "STEAM_ACHIEVEMENT",
+  "description": "Steam achievement unlock sound - high frequency two-tone chime",
+  "frequency_range": [1500, 5000],
+  "duration_range": [0.8, 2.5],
+  "correlation_threshold": 0.65,
+  "energy_threshold": 0.15,
+  "characteristics": {
+    "primary_frequency": 2700,
+    "secondary_frequency": 3500,
+    "harmonics": [5400],
+    "envelope": "exponential_decay",
+    "signature": "two_tone_chime"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "killstreak_announcer",
+  "event_type": "KILLSTREAK_ANNOUNCER",
+  "description": "Generic FPS killstreak announcer voice - mid-range frequencies with formants",
+  "frequency_range": [150, 3500],
+  "duration_range": [0.5, 3.0],
+  "correlation_threshold": 0.55,
+  "energy_threshold": 0.18,
+  "characteristics": {
+    "formants": [500, 1200, 2500],
+    "envelope": "voice_like",
+    "signature": "announcer_vocals",
+    "pattern": "variable_pitch"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "name": "audio_spike",
+  "event_type": "AUDIO_SPIKE",
+  "description": "Sudden audio spikes from explosions, intense moments, or loud events",
+  "frequency_range": [20, 20000],
+  "duration_range": [0.05, 1.0],
+  "correlation_threshold": 0.0,
+  "energy_threshold": 0.0,
+  "characteristics": {
+    "detection_method": "energy_z_score",
+    "z_score_threshold": 4.0,
+    "cooldown_seconds": 0.3,
+    "signature": "sudden_energy_increase"
+  },
+  "note": "Spike detection uses statistical analysis rather than template matching"
+}

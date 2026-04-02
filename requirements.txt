@@ -1,7 +1,23 @@
-flask
-flask-cors
-requests
-psutil
-pillow
-websockets>=10.0
-pyinstaller
+# Audio Event Detection System - Dependencies
+# For StreamTracker's AI Avatar - Real-time game audio detection
+
+# Core audio processing
+pyaudio>=0.2.11
+numpy>=1.21.0
+scipy>=1.7.0
+
+# Advanced audio analysis (optional but recommended)
+librosa>=0.9.0
+
+# Audio file I/O for loading reference sounds
+soundfile>=0.10.0
+
+# Optional: Real-time visualization (for debugging)
+matplotlib>=3.5.0
+
+# Optional: Better audio device detection on Windows
+# pywin32>=227; platform_system=="Windows"
+
+# Development dependencies (optional)
+pytest>=7.0.0
+black>=22.0.0

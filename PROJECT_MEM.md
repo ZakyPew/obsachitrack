@@ -2,9 +2,9 @@
 
 **Project:** StreamTracker Web (SaaS Platform)  
 **Created:** 2026-03-01  
-**Last Updated:** 2026-03-03  
+**Last Updated:** 2026-03-07  
 **Location:** `~/projects/active/streamtracker-web/`  
-**Status:** 🚀 **PRODUCTION READY - LAUNCH DAY**  
+**Status:** 🚀 **ACTIVE - 23 PRs MERGED**
 
 ---
 
@@ -41,43 +41,99 @@ Transform the local StreamTracker desktop app (Flask-based, v1.7) into a **web-b
 
 ---
 
-## ✅ Recent Fixes & Features (2026-03-02)
+## ✅ Recent PRs Merged (March 5-7, 2026)
+
+### PR #64 — Steam Game Override Flow
+**Forced Steam game override (DB, API, overlay, dashboard)**
+- Users can manually override detected Steam game
+- `ForcedGameOverride` model + `forced_game_overrides` table
+- API endpoints: `POST/GET/DELETE /api/forced-game-override`
+- Overlay respects override when rendering
+- Dashboard UI for setting/clearing override
+
+### PR #63 — Discord Links Update
+**Updated all Discord invite links to new URL**
+- Changed Discord invite URLs across all pages
+
+### PR #62 — Dashboard Current-Game Polling
+**Polling with cleanup and empty-state**
+- 20s polling interval for active Steam game state
+- Empty-state placeholder when no game is active
+- Cleanup on pagehide/logout to prevent duplicate intervals
+- Hunter controls update automatically when game changes
+
+### PR #21 — Sticky Quick-Nav
+- Sticky navigation bar for dashboard
+- Improved mobile UX
+
+### PR #20 — Pro Capability Audit + Waitlist Gating
+- `PLAN_PRO_AUDIT` map for Pro features
+- Waitlist form when Pro checkout disabled
+- Pro Preview Lab section in dashboard
+- Pricing value statements (outcome-oriented)
+
+### PR #19 — Lifecycle Milestone Tracking
+- `LifecycleEvent` + `InAppNotification` models
+- Milestone tracking: account created, Steam key connected, overlay URL generated
+- Dashboard checklist: "Complete setup" + upgrade prompts
+- `GET /api/dashboard-milestones` endpoint
+
+### PR #18 — SEO + Open Graph + JSON-LD
+- Meta tags, canonical links
+- Open Graph + Twitter card tags
+- JSON-LD structured data on pricing page
+- Root `/` serves landing page directly
+
+### PR #17 — Pricing Auth-Aware CTAs
+- Billing interval options (monthly/quarterly/annual)
+- Unauthenticated users → login with intent
+- Authenticated users → direct checkout
+- `GET /stripe/pricing-options` endpoint
+
+### PR #16 — Analytics for CTAs + Stripe Webhooks
+- Client-side events: `landing_cta_click`, `pricing_plan_cta_click`, `begin_checkout`, `purchase`
+- Server-side webhook logging for conversions
+- Checkout success/cancel tracking
+
+### PR #15 — Dashboard UI Revamp
+- Modern Inter font, gradients, sticky navbar
+- API Key & Account ID Guide panel
+- Per-platform help (Steam/Xbox/PlayStation)
+- Inline help box for linking
+
+### PR #14 + #13 + #12 — Landing Page Live Preview
+- Rotating game preview overlay on landing page
+- `GET /api/landing-preview` (JSON snapshot)
+- `GET /api/landing-preview/stream` (SSE real-time updates)
+- Client-side rotation every ~2.6s with dot indicators
+
+### PR #11 — Dashboard Modernization
+- Revamped dashboard styling
+- Trophy room link improvements
+- Linked accounts UI polish
+
+---
+
+## ✅ Earlier Features (March 1-3)
 
 ### Steam API Key Save Fix
 - **Fixed:** Steam API key not saving due to database session mismatch
-- **Solution:** Use fresh `SessionLocal()` in save endpoint, re-fetch user in that session
-- **Status:** ✅ DONE
+- **Solution:** Use fresh `SessionLocal()` in save endpoint
 
 ### Game Name Override System
-- **Feature:** Users can now rename games when Steam API returns wrong/internal names
-- **Implementation:**
-  - `UserGameName` model - per-user custom names
-  - `GlobalGameName` model - admin-curated global overrides
-  - Priority: User override > Global override > Steam API name
-- **API Endpoints:**
-  - `POST /api/game-name-override` - Set custom name
-  - `DELETE /api/game-name-overrides/{app_id}` - Remove override
-  - `GET /api/game-name-overrides/{app_id}` - Get override status
-  - `GET /api/game-name-overrides` - List all overrides
-- **Status:** ✅ DONE
+- `UserGameName` + `GlobalGameName` models
+- Priority: User > Global > Steam API
 
 ### Admin Panel (Steam ID Gated)
-- **Access:** Gated by `ADMIN_STEAM_IDS` env var (your Steam ID)
-- **Features:** Manage global game name overrides, user management (grant/revoke premium, admin, VIP)
-- **URL:** `/admin`
-- **Status:** ✅ DONE (bug fixes completed 2026-03-03)
+- `/admin` — Manage game name overrides, user management
 
-### Launch Day Visual Updates (2026-03-03)
-- **Real Screenshots:** ARC RAIDERS, Final Fantasy XVI, FAITH overlays on landing page
-- **Logo:** Custom logo as favicon and navbar icon
-- **Steam Buttons:** Custom SVG high-resolution buttons matching Steam brand colors
-- **Tracking:** Google AdSense + Google Analytics 4 integrated
+### Launch Day Visual Updates
+- Real overlay screenshots (ARC RAIDERS, FF16, FAITH)
+- Custom logo as favicon/navbar icon
+- Custom Steam sign-in buttons (SVG)
+- Google AdSense + Analytics 4
 
-### Overlay with Game Artwork
-- **Style:** Matches original StreamTracker GitHub design
-- **Features:** Steam card, progress bar, recent unlocks tray, "LATEST UNLOCK" display
-- **Artwork:** Game header images from Steam Store API with blur effect
-- **Status:** ✅ DONE
+---
 
 ## 🔄 In Progress
 
@@ -87,16 +143,19 @@ Transform the local StreamTracker desktop app (Flask-based, v1.7) into a **web-b
 - [x] Game name override system ✅ DONE
 - [x] Admin panel (Steam ID gated) ✅ DONE
 - [x] Game artwork in overlay ✅ DONE
-- [x] Dashboard UI for game renaming ✅ DONE
+- [x] Dashboard UI ✅ DONE
 - [x] Vertical overlay mode (Premium) ✅ DONE
-- [x] Stripe integration backend ✅ DONE
-- [x] Stripe activation ✅ DONE
-- [x] Google AdSense monetization ✅ DONE
-- [x] Google Analytics 4 tracking ✅ DONE
-- [x] Landing page with real screenshots ✅ DONE
-- [x] Custom Steam sign-in buttons ✅ DONE
-- [x] Logo and favicon ✅ DONE
-- [ ] Dashboard premium checkout UI polish
+- [x] Stripe integration ✅ DONE
+- [x] Google AdSense + Analytics ✅ DONE
+- [x] Landing page live preview ✅ DONE
+- [x] Lifecycle milestone tracking ✅ DONE
+- [x] Pro waitlist gating ✅ DONE
+- [x] SEO/Open Graph metadata ✅ DONE
+- [x] Dashboard current-game polling ✅ PR #62
+- [x] Discord invite links updated ✅ PR #63
+- [x] Steam game override flow ✅ PR #64
+- [ ] Social media announcement
+- [ ] First paying customer
 
 ---
 
@@ -105,8 +164,8 @@ Transform the local StreamTracker desktop app (Flask-based, v1.7) into a **web-b
 1. **Backend:** FastAPI (async, modern, auto-docs)
 2. **Auth:** Steam OpenID (users already have Steam accounts)
 3. **Database:** PostgreSQL (user data) + Redis (caching/sessions)
-4. **Frontend:** Vanilla JS overlay (OBS-friendly) + React dashboard (optional)
-5. **Billing:** Stripe (monthly subscriptions, free tier limits)
+4. **Frontend:** Vanilla JS overlay (OBS-friendly)
+5. **Billing:** Stripe with monthly/quarterly/annual options
 
 ---
 
@@ -115,31 +174,23 @@ Transform the local StreamTracker desktop app (Flask-based, v1.7) into a **web-b
 ### File Locations
 | Component | Path |
 |-----------|------|
-| Original Flask app | `app.py` |
-| Backend entry | `backend/main.py` |
-| Steam auth | `backend/auth/steam.py` |
-| Database setup | `backend/database.py` |
-| WebSocket server | `websocket_server.py` (reuse!) |
-| Sound manager | `sound_manager.py` (reuse!) |
-| Streamer.bot handler | `streamerbot_handler.py` (reuse!) |
-
-### Original App Endpoints (Port These!)
-- `GET /` — Main overlay
-- `GET /dock` — Control dock
-- `GET /data` — Achievement data (JSON)
-- `POST /webhook/streamerbot` — Streamer.bot integration
-- `WS localhost:8765` — WebSocket real-time updates
+| Backend | `main.py` |
+| Stripe routes | `routers/stripe.py` |
+| Auth | `auth/steam.py`, `auth/local.py` |
+| Services | `services/lifecycle.py`, `services/entitlements.py` |
 
 ### Git
-- **Repo:** Local (based on `ZakyPew/StreamTracker`)
+- **Repo:** `ZakyPew/StreamTrackerWebsite`
 - **Branch:** master
-- **Status:** 12 commits, clean working tree
+- **Total PRs Merged:** 21+ (#11-#21, more in flight)
 
 ---
 
 ## 🐛 Known Issues / Blockers
 
-- ✅ All blockers resolved! StreamTracker v1.0 is production ready.
+- ✅ No major blockers
+
+---
 
 ## 🚀 Launch Checklist
 
@@ -151,6 +202,8 @@ Transform the local StreamTracker desktop app (Flask-based, v1.7) into a **web-b
 - [x] Admin panel functional
 - [x] Stripe billing working
 - [x] Real product screenshots on landing page
+- [x] Live preview on landing page
+- [x] Lifecycle tracking + upgrade prompts
 - [ ] Social media announcement
 - [ ] First paying customer
 
@@ -159,20 +212,37 @@ Transform the local StreamTracker desktop app (Flask-based, v1.7) into a **web-b
 ## 💡 Ideas / Backlog
 
 - [ ] Free tier: 1 game, basic overlay
-- [ ] Premium: Unlimited games, custom themes, priority WebSocket
-- [ ] Analytics dashboard (streaming stats, achievement history)
+- [ ] Premium: Unlimited games, custom themes
+- [ ] Twitch integration (mentioned in earlier notes)
+- [ ] Nintendo Switch integration (mentioned in earlier notes)
+- [ ] Analytics dashboard (streaming stats)
 - [ ] Public API for 3rd party integrations
-- [ ] Mobile app for notifications?
 
 ---
 
 ## 🔗 References
 
-- **Original Repo:** https://github.com/ZakyPew/StreamTracker
-- **Architecture:** `ARCHITECTURE.md`
-- **Release Checklist:** `RELEASE_CHECKLIST.md`
-- **Integration Guide:** `INTEGRATION.md`
+- **Repo:** https://github.com/ZakyPew/StreamTrackerWebsite
+- **Live Site:** https://streamtracker.cloud
+- **VPS:** 74.208.147.236:/opt/streamtracker/
 
 ---
 
-*Last updated: 2026-03-03 — PRODUCTION READY FOR LAUNCH! 🚀*
+*Last updated: 2026-03-07 — PRs #62, #63, #64 deployed 🚀*
+
+---
+
+## 🛠️ Tech Stack
+- Next.js 14
+- FastAPI
+- PostgreSQL
+- Prisma ORM
+- TypeScript
+- TailwindCSS
+- WebSocket
+- Stripe Billing
+- Steam OAuth
+
+## 🔗 Related Projects
+- stream-bot (shared OBS/WebSocket patterns)
+- vtuber (streaming ecosystem)

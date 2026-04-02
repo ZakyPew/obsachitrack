@@ -1,0 +1,16 @@
+{
+  "name": "xbox_achievement",
+  "event_type": "XBOX_ACHIEVEMENT",
+  "description": "Xbox achievement unlock sound - lower pitch resonant chime",
+  "frequency_range": [600, 2000],
+  "duration_range": [0.5, 2.0],
+  "correlation_threshold": 0.65,
+  "energy_threshold": 0.15,
+  "characteristics": {
+    "primary_frequency": 1100,
+    "harmonics": [2200],
+    "envelope": "exponential_decay",
+    "signature": "resonant_chime",
+    "pitch_bend": true
+  }
+}
