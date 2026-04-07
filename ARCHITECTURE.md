@@ -2,7 +2,7 @@
 
 **Project:** StreamTracker SaaS Platform  
 **Created:** 2026-03-01  
-**Based on:** https://github.com/ZakyPew/StreamTracker  
+
 
 ## 🎯 Goal
 
